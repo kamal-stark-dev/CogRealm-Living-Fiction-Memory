@@ -1,32 +1,12 @@
-import asyncio
-import sys
-
-# This fixes a surprising number of asyncio/SSL issues on Windows.
-if sys.platform == "win32":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
-import cognee
+import asyncio, cognee
 from cognee import SearchType
 
 async def test():
-    try:
-        print("Adding data to Cognee...")
-        await cognee.remember(
-            "Naruto Uzumaki is a ninja from Konohagakure. His best friend is Sasuke Uchiha."
-        )
+    await cognee.remember("Naruto Uzumkai is a ninja of Konoha. His best friend is Sasuke Uchiha.")
 
-        print("Cognifying...")
-        await cognee.cognify()
+    await cognee.cognify()
 
-        print("Searching...")
-        response = await cognee.recall(
-            query_type=SearchType.GRAPH_COMPLETION,
-            query_text="Who is Naruto's best friend?"
-        )
-
-        print(response)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
+    response = await cognee.recall(query_type=SearchType.GRAPH_COMPLETION, query_text="Who is Naruto's best friend?")
+    print(response)
 
 asyncio.run(test())
